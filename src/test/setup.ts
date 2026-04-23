@@ -1,6 +1,9 @@
 // Global test setup for vitest + jsdom
 // Runs before every test file in the suite.
 
+// Add jest-dom matchers (toBeInTheDocument, toHaveAttribute, etc.)
+import "@testing-library/jest-dom/vitest";
+
 // Make @testing-library/svelte cleanup automatic after each test.
 import "@testing-library/svelte/vitest";
 

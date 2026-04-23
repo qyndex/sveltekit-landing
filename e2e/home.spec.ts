@@ -35,10 +35,15 @@ test.describe("Home / Landing page", () => {
     await expect(logo).toHaveAttribute("href", "/");
   });
 
-  test("nav contains Features, Pricing, and Docs links", async ({ page }) => {
+  test("nav contains Features, Testimonials, Pricing, and FAQ links", async ({
+    page,
+  }) => {
     await expect(page.getByRole("link", { name: "Features" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Testimonials" })
+    ).toBeVisible();
     await expect(page.getByRole("link", { name: "Pricing" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Docs" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "FAQ" })).toBeVisible();
   });
 
   test("nav has Log in and Get Started CTAs", async ({ page }) => {
@@ -55,7 +60,6 @@ test.describe("Home / Landing page", () => {
   test("hero h1 contains the tagline", async ({ page }) => {
     const h1 = page.getByRole("heading", { level: 1 });
     await expect(h1).toBeVisible();
-    // Page server returns "Ship faster. Scale smarter."
     await expect(h1).toContainText("Ship faster");
   });
 
@@ -66,7 +70,9 @@ test.describe("Home / Landing page", () => {
   });
 
   test("hero secondary CTA Watch Demo is present", async ({ page }) => {
-    await expect(page.getByRole("link", { name: "Watch Demo" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Watch Demo" })
+    ).toBeVisible();
   });
 
   // ── Features section ─────────────────────────────────────────────────────
@@ -80,7 +86,9 @@ test.describe("Home / Landing page", () => {
     await expect(heading).toBeVisible();
   });
 
-  test("features section contains at least one feature card", async ({ page }) => {
+  test("features section contains at least one feature card", async ({
+    page,
+  }) => {
     const cards = page.locator("section.features article.card");
     await expect(cards).not.toHaveCount(0);
   });
@@ -103,6 +111,19 @@ test.describe("Home / Landing page", () => {
     ).toBeVisible();
   });
 
+  // ── Testimonials section ────────────────────────────────────────────────
+
+  test("testimonials section is visible", async ({ page }) => {
+    await expect(page.locator("section.testimonials")).toBeVisible();
+  });
+
+  test("testimonials section heading is present", async ({ page }) => {
+    const heading = page.getByRole("heading", {
+      name: "What people are saying",
+    });
+    await expect(heading).toBeVisible();
+  });
+
   // ── Pricing section ──────────────────────────────────────────────────────
 
   test("pricing section is visible", async ({ page }) => {
@@ -122,7 +143,9 @@ test.describe("Home / Landing page", () => {
   });
 
   test("Starter, Pro, and Enterprise plans are present", async ({ page }) => {
-    await expect(page.getByRole("heading", { name: "Starter" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Starter" })
+    ).toBeVisible();
     await expect(page.getByRole("heading", { name: "Pro" })).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Enterprise" })
@@ -134,9 +157,53 @@ test.describe("Home / Landing page", () => {
     await expect(featuredCard).toHaveCount(1);
   });
 
-  test("plan CTA links navigate to /signup with plan param", async ({ page }) => {
+  test("plan CTA links navigate to /signup with plan param", async ({
+    page,
+  }) => {
     const starterCta = page.getByRole("link", { name: "Start Free" });
     await expect(starterCta).toHaveAttribute("href", "/signup?plan=starter");
+  });
+
+  // ── FAQ section ──────────────────────────────────────────────────────────
+
+  test("FAQ section is visible", async ({ page }) => {
+    await expect(page.locator("section.faq")).toBeVisible();
+  });
+
+  test("FAQ section heading is present", async ({ page }) => {
+    const heading = page.getByRole("heading", {
+      name: "Frequently asked questions",
+    });
+    await expect(heading).toBeVisible();
+  });
+
+  test("FAQ accordion opens when question is clicked", async ({ page }) => {
+    // Click first FAQ button
+    const firstButton = page.locator("section.faq button").first();
+    await firstButton.click();
+    // The dd element should now be visible
+    const answer = page.locator("section.faq dd").first();
+    await expect(answer).toBeVisible();
+  });
+
+  // ── Waitlist form ────────────────────────────────────────────────────────
+
+  test("waitlist section is visible", async ({ page }) => {
+    await expect(page.locator("section.waitlist")).toBeVisible();
+  });
+
+  test("waitlist heading is present", async ({ page }) => {
+    const heading = page.getByRole("heading", {
+      name: "Join the waitlist",
+    });
+    await expect(heading).toBeVisible();
+  });
+
+  test("waitlist form has email input and submit button", async ({ page }) => {
+    await expect(page.locator('#waitlist-email')).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Join Waitlist" })
+    ).toBeVisible();
   });
 
   // ── Footer ───────────────────────────────────────────────────────────────
@@ -149,9 +216,15 @@ test.describe("Home / Landing page", () => {
     page,
   }) => {
     const footerNav = page.getByRole("navigation", { name: "Footer links" });
-    await expect(footerNav.getByRole("link", { name: "Privacy" })).toBeVisible();
-    await expect(footerNav.getByRole("link", { name: "Terms" })).toBeVisible();
-    await expect(footerNav.getByRole("link", { name: "Contact" })).toBeVisible();
+    await expect(
+      footerNav.getByRole("link", { name: "Privacy" })
+    ).toBeVisible();
+    await expect(
+      footerNav.getByRole("link", { name: "Terms" })
+    ).toBeVisible();
+    await expect(
+      footerNav.getByRole("link", { name: "Contact" })
+    ).toBeVisible();
   });
 
   test("footer shows the current year in the copyright notice", async ({
@@ -176,22 +249,32 @@ test.describe("Home / Landing page", () => {
 
   // ── Layout / scroll behaviour ────────────────────────────────────────────
 
-  test("sections appear in order: hero → features → pricing → footer", async ({
+  test("sections appear in order: hero > features > testimonials > pricing > faq > waitlist > footer", async ({
     page,
   }) => {
     const heroBox = await page.locator("section.hero").boundingBox();
     const featuresBox = await page.locator("section.features").boundingBox();
+    const testimonialsBox = await page
+      .locator("section.testimonials")
+      .boundingBox();
     const pricingBox = await page.locator("section.pricing").boundingBox();
+    const faqBox = await page.locator("section.faq").boundingBox();
+    const waitlistBox = await page.locator("section.waitlist").boundingBox();
     const footerBox = await page.locator("footer").boundingBox();
 
     expect(heroBox).not.toBeNull();
     expect(featuresBox).not.toBeNull();
+    expect(testimonialsBox).not.toBeNull();
     expect(pricingBox).not.toBeNull();
+    expect(faqBox).not.toBeNull();
+    expect(waitlistBox).not.toBeNull();
     expect(footerBox).not.toBeNull();
 
-    // Each section starts below the previous one in document flow
     expect(heroBox!.y).toBeLessThan(featuresBox!.y);
-    expect(featuresBox!.y).toBeLessThan(pricingBox!.y);
-    expect(pricingBox!.y).toBeLessThan(footerBox!.y);
+    expect(featuresBox!.y).toBeLessThan(testimonialsBox!.y);
+    expect(testimonialsBox!.y).toBeLessThan(pricingBox!.y);
+    expect(pricingBox!.y).toBeLessThan(faqBox!.y);
+    expect(faqBox!.y).toBeLessThan(waitlistBox!.y);
+    expect(waitlistBox!.y).toBeLessThan(footerBox!.y);
   });
 });
