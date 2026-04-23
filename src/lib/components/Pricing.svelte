@@ -4,7 +4,7 @@
   let { plans }: Props = $props();
 </script>
 
-<section class="pricing">
+<section class="pricing" id="pricing">
   <div class="container">
     <h2>Simple, transparent pricing</h2>
     <div class="grid">

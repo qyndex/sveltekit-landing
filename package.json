@@ -16,6 +16,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.0",
     "@sveltejs/kit": "^2.8.0",
     "svelte": "^5.0.0"
   },

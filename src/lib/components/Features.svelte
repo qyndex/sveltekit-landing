@@ -4,7 +4,7 @@
   let { features }: Props = $props();
 </script>
 
-<section class="features">
+<section class="features" id="features">
   <div class="container">
     <h2>Everything you need</h2>
     <div class="grid">

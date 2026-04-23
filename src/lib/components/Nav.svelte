@@ -3,8 +3,9 @@
 
   const links = [
     { href: "/#features", label: "Features" },
+    { href: "/#testimonials", label: "Testimonials" },
     { href: "/#pricing", label: "Pricing" },
-    { href: "/docs", label: "Docs" },
+    { href: "/#faq", label: "FAQ" },
   ];
 </script>
 
