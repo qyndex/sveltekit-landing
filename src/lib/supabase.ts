@@ -5,6 +5,6 @@ import { env } from "$env/dynamic/public";
 // Uses $env/dynamic/public so values can be injected at runtime
 // (e.g. in Docker) rather than baked in at build time.
 export const supabase = createClient(
-  env.PUBLIC_SUPABASE_URL ?? "",
-  env.PUBLIC_SUPABASE_ANON_KEY ?? ""
+  env.PUBLIC_SUPABASE_URL || "http://localhost:54321",
+  env.PUBLIC_SUPABASE_ANON_KEY || "placeholder"
 );
